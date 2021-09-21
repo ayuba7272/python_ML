@@ -8,3 +8,5 @@ I am proficient at analysis in SQL, SAS, Python, Excel and GIS. I have also work
 
 I have on several occasions worked on breaking down complex business problems and building agile analytical solutions using machine learning techniques such as regression, clustering, dcision trees, random forest classifiers and anomaly detection. 
 Over the course of my career I have developed a good understanding of different business areas such as retail marketing and customer analytics, online web analytics, pharmaceutical contracting, sales territory planning, credit risk analysis and process automation.
+
+
