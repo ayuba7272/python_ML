@@ -159,9 +159,8 @@ def classification_eval(y_true,y_pred,prob_thrs=0.5):
 	    	v.    F1 Score : 
 	    	vi.   AUC : 
 	    	vii.  AUCPR : 
-	    2. Log Loss / Binary Cross Entropy:
-    	3. 
-    	Categorical Cross Entropy : 
+	2. Log Loss / Binary Cross Entropy:
+    	3. Categorical Cross Entropy : 
     
     '''
     if len(y_true) != len(y_true):
