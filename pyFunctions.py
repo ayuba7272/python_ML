@@ -21,6 +21,25 @@ def corr_matrix (df=None,target_var='',method=None):
 
 ############################################################################################################################
 
+def obj_cols(df):
+    '''
+    This function returns the object columns in a given dataframe
+    Parameters:
+    	df (Pandas dataframe) : The dataframe in which to search for object columns
+
+    Returns:
+    	List of Object columns
+    '''
+    object_cols = df.select_dtypes(include = ['object']).columns
+    print('Count of object columns: {}'.format(object_cols.shape[0]))
+    if object_cols.shape[0]>0 : 
+    	return list(object_cols.values)
+    else:
+    	print('No object columns in the dataframe!')
+    	return
+
+############################################################################################################################
+
 def dataframe_null_report(df=None,null_pct_threshold=0):
     '''
     This function returns the fraction of nulls in each column of the dataframe based on a threshold specified as a fraction
@@ -45,7 +64,7 @@ def dataframe_null_report(df=None,null_pct_threshold=0):
 
 ############################################################################################################################
 
-from sklearn.metrics import mean_squared_error , mean_squared_log_error , mean_absolute_percentage_error , r2_score
+from sklearn.metrics import mean_squared_error,mean_squared_log_error, mean_absolute_percentage_error, r2_score
 def regression_eval(y_true,y_pred,thrs=0,predictors=0):
     '''
     This function evaluates the performance of a regression model and returns evaluation metrics
@@ -89,8 +108,9 @@ def regression_eval(y_true,y_pred,thrs=0,predictors=0):
     
     #Percentage Error
     mape=np.mean(np.abs((y_true - y_pred) / y_true)) * 100
-    overpred_pct = (y_pred-y_true>thrs).mean() * 100
-    underpred_pct = (y_true-y_pred>thrs).mean() * 100
+    # mape = mean_absolute_percentage_error(y_true,y_pred) *100
+    overpred_pct=(y_pred-y_true>thrs).mean() * 100
+    underpred_pct=(y_true-y_pred>thrs).mean() * 100
     
     #RMSE & RMSLE
     rmse = np.sqrt(mean_squared_error(y_true,y_pred))
@@ -101,7 +121,8 @@ def regression_eval(y_true,y_pred,thrs=0,predictors=0):
     normalized_y_true = (y_true - Y_min) / (Y_max - Y_min)
     normalized_y_pred = (y_pred - Y_min) / (Y_max - Y_min)
     try:
-        rmsle = np.sqrt(mean_squared_log_error(normalized_y_true,normalized_y_pred))
+        # rmsle = np.sqrt(mean_squared_log_error(normalized_y_true,normalized_y_pred))
+        rmsle = np.sqrt(mean_squared_log_error(y_true,y_pred))
     except:
         print("An exception occurred while calculating rmsle.")
         rmsle = np.NaN
@@ -141,6 +162,102 @@ def regression_eval(y_true,y_pred,thrs=0,predictors=0):
 
 ############################################################################################################################
 
+def show_distribution(df=None,variable_name='',
+                      pctl = [0.01,  0.20 , 0.25, 0.30 , 0.33, 0.40 , 0.50 , 0.60 , 0.67, 0.75, 0.80 , 0.90 , 0.99], 
+                      plot= True, bins = 50):
+    '''
+    This function shows the distribution (Histogram plot) of any variable and returns some important percentile values of the variable
+    Parameters:
+        df            : The pandas dataframe that contains this variable data
+        varaible_name : String, Name of the variable for which the distribution should be shown
+        pctl          : List of Percentile values that should be returned (0 to 1 in multiples of 0.01)
+        plot          : Boolean, Default True; Will plot a histogram if set to True
+        bins          : The number of bins into which the data should be plotted on the histogram
+    '''
+    percentil = df[variable_name].quantile(np.linspace(.01, 1, 99, 0), 'lower')
+    op = percentil[pctl]
+    op = op.to_frame().reset_index()
+    op.rename(columns = {'index': 'Percentile'},inplace=True)
+    op.loc[len(op.index)] = ['Average', df[variable_name].mean()]
+    if plot == True:
+        plt.figure(figsize = (20,8))
+        sns.distplot(x=df[variable_name], bins = bins)
+    return op
+
+
+############################################################################################################################
+
+# Language Translation
+import re
+import html
+import urllib.request
+import urllib.parse
+
+def translate_function(to_translate, to_language="en", from_language="id"):
+    """
+    Returns the translation using google translate
+    	You must shortcut the language you define (French = fr, English = en, Spanish = es, etc...).
+    	If not defined it will detect it or use english by default
+    Example:
+    	print(translate("salut tu vas bien?", "en"))
+    	hello you alright?
+    """
+    
+    parser = html
+    agent = {'User-Agent':
+         "Mozilla/4.0 (\
+compatible;\
+MSIE 6.0;\
+Windows NT 5.1;\
+SV1;\
+.NET CLR 1.1.4322;\
+.NET CLR 2.0.50727;\
+.NET CLR 3.0.04506.30\
+)"}
+	base_link = "http://translate.google.com/m?tl=%s&sl=%s&q=%s"
+    to_translate = urllib.parse.quote(to_translate)
+    link = base_link % (to_language, from_language, to_translate)
+    request = urllib.request.Request(link, headers=agent)
+    raw_data = urllib.request.urlopen(request).read()
+    data = raw_data.decode("utf-8")
+    expr = r'(?s)class="(?:t0|result-container)">(.*?)<'
+    re_result = re.findall(expr, data)
+    if (len(re_result) == 0):
+        result = ""
+    else:
+        result = parser.unescape(re_result[0])
+    return (result)
+
+############################################################################################################################
+
+# Changing skewed distribution to a normal distribution
+
+def box_cox_transform(feature=None, lambda_ = 0.25 , reverse = False ):
+    '''
+    This function returns the normalized distribution of input array by applying a Box-Cox transformation
+    OR returns the reverse transform of a box-cox transformation if reverse is set to True
+
+    Parameters:
+        feature : A numpy array of the feature that you want to transform
+        lambda_ : Lambda value for the box-cox transformation (The lambda can be estimated by using maximum likelihood to optimize the normality of the model results
+        reverse : Default False, if set to True, the function will return the revese transform of a box-cox transformation
+    '''
+    if type(feature) is np.ndarray:
+        if reverse == False:
+            print('Applying Box-Cox Transformation to the input array')
+            y_ = (feature ** lambda_) - 1
+            return y_
+        else:
+            print('Reversing Box-Cox Transformation to the input array')
+            y_ = (feature + 1) ** (1/lambda_)
+            return y_
+    else:
+        print('The input array is not a numpy array! Please provide a numpy array as input.')
+        return
+
+
+############################################################################################################################
+
 def classification_eval(y_true,y_pred,prob_thrs=0.5):
     '''
     This function evaluates the performance of a classification model and returns evaluation metrics
@@ -151,16 +268,17 @@ def classification_eval(y_true,y_pred,prob_thrs=0.5):
         prob_thrs (numeric) : Between 0 and 1; 0.5 by default. Predicted values >= threshold are considered as positive and below are negative.
     
     Returns: Dataframe with below metrics to evaluate performance of the classification model
-    	1. Number of Observations : Rows on which the model is being evaluated, length of the y_pred/y_true series
-	    	i.    Confusion Matrix :
-	    	ii.   Accuracy : 
-	    	iii.  Precision : 
-	    	iv.   Recall : 
-	    	v.    F1 Score : 
-	    	vi.   AUC : 
-	    	vii.  AUCPR : 
-	2. Log Loss / Binary Cross Entropy:
-    	3. Categorical Cross Entropy : 
+        1. Number of Observations : Rows on which the model is being evaluated, length of the y_pred/y_true series
+            i.    Confusion Matrix :
+            ii.   Accuracy : 
+            iii.  Precision : 
+            iv.   Recall : 
+            v.    F1 Score : 
+            vi.   AUC : 
+            vii.  AUCPR : 
+        2. Log Loss / Binary Cross Entropy:
+        3. 
+        Categorical Cross Entropy : 
     
     '''
     if len(y_true) != len(y_true):
@@ -169,3 +287,4 @@ def classification_eval(y_true,y_pred,prob_thrs=0.5):
     
     eval_metrics = dict()
     n = len(y_true)
+
