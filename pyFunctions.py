@@ -45,6 +45,7 @@ def dataframe_null_report(df=None,null_pct_threshold=0):
 
 ############################################################################################################################
 
+from sklearn.metrics import mean_squared_error , mean_squared_log_error , mean_absolute_percentage_error , r2_score
 def regression_eval(y_true,y_pred,thrs=0,predictors=0):
     '''
     This function evaluates the performance of a regression model and returns evaluation metrics
@@ -80,16 +81,16 @@ def regression_eval(y_true,y_pred,thrs=0,predictors=0):
     #Absolute magnitude of error: 
     all_err=np.abs(y_pred-y_true)
     mae=all_err.mean()
-    overpred_magnitude=(y_pred-y_true>thrs).mean()
-    underpred_magnitude=(y_true-y_pred>thrs).mean()
+    overpred_magnitude=(all_err[y_pred-y_true>thrs]).mean()
+    underpred_magnitude=(all_err[y_true-y_pred>thrs]).mean()
     
     max_overpred=(all_err[y_pred-y_true>thrs]).max()
     max_underpred=(all_err[y_true-y_pred>thrs]).max()
     
     #Percentage Error
     mape=np.mean(np.abs((y_true - y_pred) / y_true)) * 100
-    overpred_pct=(((all_err[y_pred-y_true>thrs]).count())/n) * 100
-    underpred_pct=(((all_err[y_true-y_pred>thrs]).count())/n) * 100
+    overpred_pct = (y_pred-y_true>thrs).mean() * 100
+    underpred_pct = (y_true-y_pred>thrs).mean() * 100
     
     #RMSE & RMSLE
     rmse = np.sqrt(mean_squared_error(y_true,y_pred))
@@ -158,9 +159,8 @@ def classification_eval(y_true,y_pred,prob_thrs=0.5):
 	    	v.    F1 Score : 
 	    	vi.   AUC : 
 	    	vii.  AUCPR : 
-	    2. Log Loss / Binary Cross Entropy:
-    	3. 
-    	Categorical Cross Entropy : 
+	2. Log Loss / Binary Cross Entropy:
+    	3. Categorical Cross Entropy : 
     
     '''
     if len(y_true) != len(y_true):
