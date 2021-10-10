@@ -258,14 +258,104 @@ def box_cox_transform(feature=None, lambda_ = 0.25 , reverse = False ):
 
 ############################################################################################################################
 
-def classification_eval(y_true,y_pred,prob_thrs=0.5):
+from sklearn.model_selection import train_test_split
+def get_samples(df, num_samples, sample_size = None, stratify = None, seed = 12345):
+    '''
+    This function splits a dataframe into a number of samples based on the sample_size or saples of the approximately same length
+    Parameters:
+        df          : Pandas Dataframe with the data, can also be an array
+        num_samples : The number of samples to get from the data
+        sample_size : Size of each sample required
+        stratify    : List of columns on which the dataframe should be stratified
+        seed        : Default 12345, For reproducing the same sample if you want to try again
+    Returns: 
+        A Dataframe with sample draw and labelled as 'Sample_Label'
+    '''
+    samples_dict = dict()
+    # Getting the length of input data
+    if 'pandas' not in str(type(df)) : l = len(df) 
+    else: l = df.shape[0]
+    # For determining the number of samples if not given
+    given_ss = sample_size
+    if sample_size == None : sample_size = int(np.floor(l/num_samples))
+    #check for length
+    if l < num_samples * sample_size:
+        raise ValueError('The number of samples with required sample size is larger than the length of input dataframe/array. '
+                         'Please reduce either the sample size OR number of samples required!')
+    for x in range(0, num_samples):
+        if x == 0:
+            temp = train_test_split(df,test_size=sample_size, random_state=seed, stratify = df[stratify] )
+            df, df2 = temp[0], temp[1]
+        elif x == num_samples-1:
+            if given_ss != None:
+                temp = train_test_split(df,test_size=sample_size, random_state=seed, stratify = df[stratify] )
+                df, df2 = temp[0], temp[1]
+            else: df2 = df
+        else:
+            temp = train_test_split(df,test_size=sample_size, random_state=seed, stratify = df[stratify] )
+            df, df2 = temp[0], temp[1]
+        
+        df2['Sample_Label'] = 'Sample_'+str(x+1)
+        samples_dict['sample_'+str(x+1)] = df2
+    
+    samples_df = pd.concat([ v for k,v in samples_dict.items()] )
+        
+    return samples_df
+
+############################################################################################################################
+
+def one_hot_encoding(df,column_name,prefix=None):
+    '''
+    This function created one hot encoded dummy variable for any given column_name
+    Parameters:
+        df          : The input Pandas dataframe
+        column_name : The column that has to be one hot encoded
+        prefix      : The prefix to the new created column with the 1/0 flag for given column_name, If no prefix is provided, then column_name will be prefixed
+    Returns:
+        Dataframe with the added on-hot encoded columns
+    '''
+    if prefix == None: prefix = coulmn_name
+    return pd.concat([df,pd.get_dummies(df['service_area_name'], prefix=prefix)],axis=1)
+
+############################################################################################################################
+
+def bin_function(feature=None,bins=10, return_bin_limits = False):
+    '''
+    This function takes a Numpy array or Pandas series as an input and divides it into bins with equal number or values in each bin
+    Parameters : 
+        feature           : Numpy array or Pandas series which will be divided into bins with equal number of values in them
+        bins              : Number of bins
+        return_bin_limits : This feature returns the bin limits in a dataframe if set to True
+    Returns :
+        Pandas dataframe with the original array along with the bin that it belongs to starting from 0 to bins-1;
+        If return_bin_limits is set to True then it also return the bin limits as a dataframe
+    '''
+    print('NOTE: Lower Limit is exclusive (except minimum value) and Upper Limit is inclusive')
+    feature_op = pd.DataFrame({'Input Values': feature })
+    feature_op['Bin'] = pd.qcut(feature_op['Input Values'], bins, labels=False)
+    if return_bin_limits != False :
+        b = int(np.floor(100/bins)) 
+        pct_lower = np.array([i/100 for i in range(0,100,b)])
+        pct_upper = pct_lower + b/100
+        pct_val = np.array([feature.quantile(i) for i in pct_upper])
+        bins_op = pd.DataFrame({'Lower Limit':pct_lower*100,'Upper Limit':pct_upper*100, 'Bin Upper Limit Values': pct_val})
+        return feature_op, bins_op
+    else : return feature_op
+
+############################################################################################################################
+
+from sklearn.metrics import confusion_matrix, roc_curve, roc_auc_score, precision_recall_curve, auc
+from sklearn.metrics import roc_curve
+def classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = False,viz = True,):
     '''
     This function evaluates the performance of a classification model and returns evaluation metrics
     
     Parameters:
         y_true (Numpy array) : The ground truth labels given in the dataset
-        y_pred (Numpy array) : Our prediction probability
-        prob_thrs (numeric) : Between 0 and 1; 0.5 by default. Predicted values >= threshold are considered as positive and below are negative.
+        y_pred (Numpy array) : Model prediction probability
+        prob_thrs (numeric)  : Between 0 and 1; 0.5 by default. Predicted values >= threshold are considered as positive and below are negative.
+        viz                  : Returns Visualization on the classifier performance along with the metrics
+        return_conf_matrix   : Returns the confusion matrix as a dataframe, Default is False
     
     Returns: Dataframe with below metrics to evaluate performance of the classification model
         1. Number of Observations : Rows on which the model is being evaluated, length of the y_pred/y_true series
@@ -277,8 +367,7 @@ def classification_eval(y_true,y_pred,prob_thrs=0.5):
             vi.   AUC : 
             vii.  AUCPR : 
         2. Log Loss / Binary Cross Entropy:
-        3. 
-        Categorical Cross Entropy : 
+        3. Categorical Cross Entropy : 
     
     '''
     if len(y_true) != len(y_true):
@@ -287,4 +376,84 @@ def classification_eval(y_true,y_pred,prob_thrs=0.5):
     
     eval_metrics = dict()
     n = len(y_true)
+    pred_df = pd.DataFrame({'y_true':y_true, 'y_pred':y_pred})
+    pred_df['y_pred_r'] = np.vectorize(lambda x: 0 if (x < prob_thrs) else 1)(y_pred)
+    cm = pd.crosstab(pred_df['y_pred_r'],pred_df['y_true'])
+    cm.rename_axis('y_pred', inplace=True)
+    normalized_cm=(cm-cm.min())/(cm.max()-cm.min())
+    TP = cm[1][1]
+    TN = cm[0][0]
+    FP = cm[0][1]
+    FN = cm[1][0]
+    
+    accuracy = (TP+TN)/(TP+TN+FP+FN)
+    precision = TP / (TP+FP)
+    recall = TP / (TP+FN)
+    f1_score = 2 * (precision * recall) / (precision + recall)
+    auc_score = roc_auc_score(y_true, y_pred)
+    fpr, tpr, t1 = roc_curve(y_true, y_pred)
+    p, r, t2 = precision_recall_curve(y_true, y_pred)
+    aucpr = auc(r, p)
+    
+    eval_metrics['Length of Data'] = len(y_true)
+    eval_metrics['True Positives'] = TP
+    eval_metrics['True Negatives'] = TN
+    eval_metrics['False Positives'] = FP
+    eval_metrics['False Negatives'] = FN
+    eval_metrics['Accuracy'] = accuracy
+    eval_metrics['Precision'] = precision
+    eval_metrics['Recall'] = recall
+    eval_metrics['F1 Score'] = f1_score
+    eval_metrics['AUC Score'] = auc_score
+    eval_metrics['AUCPR Score'] = aucpr
+
+    
+    # Visualizations
+    if viz == True:
+        fig = plt.figure(figsize=(16,12))
+        fig.suptitle('Classification Results')
+        
+        #Plotting confusion matrix
+        ax1 = fig.add_subplot(2, 2, 1)
+        ax1 = sns.heatmap(cm, annot=True, fmt='g', ax=ax1)
+        # labels, title and ticks
+        ax1.set_xlabel('True labels')
+        ax1.set_ylabel('Predicted labels')
+        ax1.set_title('Confusion Matrix')
+        
+        #Plotting the seperation between the predicted values
+        ax2 = fig.add_subplot(2, 2, 2)
+        ax2 = sns.kdeplot(pred_df[pred_df['y_true'] == 0]['y_pred'], shade = True, label = "0")
+        ax2 = sns.kdeplot(pred_df[pred_df['y_true'] == 1]['y_pred'], shade = True, label = "1")
+        ax2.set_title('Predictions KDE')
+        ax2.set_xlabel('Predicted Probability')
+        
+        #Plotting the ROC-AUC Curve
+        ax3 = fig.add_subplot(2, 2, 3)
+        ax3 = sns.lineplot(x = fpr, y = tpr)
+        ax3.set_title('ROC-AUC Curve')
+        ax3.set_xlabel('FPR')
+        ax3.set_ylabel('TPR')
+        ax3.set_xlim([-0.05, 1.05])
+        ax3.set_ylim([-0.05, 1.05])
+        ax3.text(-0.02,1,'AUC score: {:0.3f}'.format(auc_score))
+        
+        #Plotting the Precision Recall Curve
+        ax4 = fig.add_subplot(2, 2, 4)
+        ax4 = sns.lineplot(x = r, y = p)
+        ax4.set_title('Precision-Recall Curve')
+        ax4.set_xlabel('Recall')
+        ax4.set_ylabel('Precision')
+        ax4.set_xlim([-0.05, 1.05])
+        ax4.set_ylim([-0.05, 1.05])
+        ax4.text(-0.02,1,'AUCPR score: {:0.3f}'.format(aucpr))
+        
+    #Converting to Dataframe
+    eval_metrics = pd.DataFrame([eval_metrics],columns=eval_metrics.keys()).T
+    eval_metrics.columns = ['Value']
+    eval_metrics.index.set_names('Evaluation Metric',inplace=True)
+    eval_metrics['Value'] = eval_metrics['Value'].apply(lambda x: '%.2f' % x)
+    
+    if return_conf_matrix == False: return eval_metrics
+    else: return eval_metrics, cm
 
