@@ -163,7 +163,7 @@ def regression_eval(y_true,y_pred,thrs=0,predictors=0):
 ############################################################################################################################
 
 def show_distribution(df=None,variable_name='',
-                      pctl = [0.01,  0.20 , 0.25, 0.30 , 0.33, 0.40 , 0.50 , 0.60 , 0.67, 0.75, 0.80 , 0.90 , 0.99], 
+                      pctl = [0.01, 0.09, 0.25, 0.30 , 0.33, 0.40 , 0.50 , 0.60 , 0.67, 0.75, 0.80 , 0.90 , 0.99], 
                       plot= True, bins = 50):
     '''
     This function shows the distribution (Histogram plot) of any variable and returns some important percentile values of the variable
@@ -178,7 +178,13 @@ def show_distribution(df=None,variable_name='',
     op = percentil[pctl]
     op = op.to_frame().reset_index()
     op.rename(columns = {'index': 'Percentile'},inplace=True)
-    op.loc[len(op.index)] = ['Average', df[variable_name].mean()]
+    op.loc[len(op.index)] = [0, df[variable_name].min()]
+    op.loc[len(op.index)] = [1, df[variable_name].max()]
+    op['Percentile'] = 'p_'+ (op['Percentile']*100).astype(int).astype(str).str.zfill(2)
+    op.loc[len(op.index)] = ['AVG', df[variable_name].mean()]
+    op.sort_values(by=[variable_name,'Percentile'],inplace = True)
+    op.reset_index(inplace=True,drop=True)
+    op[variable_name] = op[variable_name].round(2)
     if plot == True:
         plt.figure(figsize = (20,8))
         sns.distplot(x=df[variable_name], bins = bins)
@@ -462,3 +468,40 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
     if return_conf_matrix == False: return eval_metrics
     else: return eval_metrics, cm
 
+############################################################################################################################
+# Importing necessary python packages
+import pydata_google_auth
+from google.cloud import bigquery
+from time import time as ct
+import pandas as pd
+
+def read_sql_BQ(BQ_query = 'select 1 as Sample', project_id = "", KEY_PATH = "/home/jupyter/keys/google-credentials.json"):
+    '''
+    This function reads data from BigQuery. In case a create statement is passed instead, the function will create the table and read the data as well!
+    Parameters:
+        BQ_query   : SQL statement to fetch data from Big Query
+        project_id : The project using which the data should be fetched
+        KEY_PATH   : The path to the google-credentials JSON file. If not present at given path, the fucntion will promp you to create the credentials file for the first time.
+    '''   
+    # Checking if the credentials file exists at the given path
+    try:
+        credentials = pydata_google_auth.get_user_credentials(KEY_PATH)
+    except:
+        print('This is the first time you maybe reading the data from this interface and hence your credentials might not be saved!')
+        print('You will now be prompted to login and save credentials! You will need to save this only once and going forward this function will read the same credentials.')
+        print('Make sure that the path of the credentials provided in the params for this function is correct.')
+        print('Enter 0 to exit and update the KEY_PATH parameter or Enter 1 to update / create the credentials!')
+        ip = input('Please provide your input and hit the return key:')
+        
+        if ip == '1':
+            #Run this for the first time and save the credentials
+            pydata_google_auth.save_user_credentials(['https://www.googleapis.com/auth/bigquery'],KEY_PATH,)
+        else: return 'Exiting the function! Please try again with the updated credentials path (KEY_PATH)'
+    
+    # Reading the data
+    st_time = ct()
+    df = pd.read_gbq(BQ_query, project_id=project_id, credentials = credentials)
+    print('Time for run : ~{:.0f} min'.format((ct()-st_time)/60))
+    return df
+
+############################################################################################################################
