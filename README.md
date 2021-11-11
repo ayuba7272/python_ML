@@ -1,5 +1,5 @@
 # Common Functions used in ML
-[This file](https://github.com/ayuba7272/python_ML#:~:text=last%20month-,pyFunctions.py,-updated%20pyFunctions.py) contains some very common functions used while coding for reference
+### **[This file](https://github.com/ayuba7272/python_ML#:~:text=last%20month-,pyFunctions.py,-updated%20pyFunctions.py)** contains some very common functions used while coding for reference
 
 # Other Useful resources are listed below:
 
@@ -9,7 +9,7 @@
 3. [loc and iloc for Selecting Data in Pandas](https://www.analyticsvidhya.com/blog/2020/02/loc-iloc-pandas/)
 4. [Useful Python tricks](https://medium.freecodecamp.org/an-a-z-of-useful-python-tricks-b467524ee747)
 5. [Lambda Function in Python](https://www.analyticsvidhya.com/blog/2020/03/what-are-lambda-functions-in-python/)
-6. [EDA](https://www.analyticsvidhya.com/blog/2016/01/guide-data-exploration/)
+6. [Exploratory Data Analysis](https://www.analyticsvidhya.com/blog/2016/01/guide-data-exploration/)
 7. [Feature Engineering](https://www.analyticsvidhya.com/blog/2017/04/feature-engineering-in-iot-age-how-to-deal-with-iot-data-and-create-features-for-machine-learning/)
 8. [Feature Engineering](https://www.analyticsvidhya.com/blog/2018/08/guide-automated-feature-engineering-featuretools-python/)
 9. [Feature Transformation (One hot and label encoding)](https://www.analyticsvidhya.com/blog/2020/03/one-hot-encoding-vs-label-encoding-using-scikit-learn/)
@@ -40,3 +40,40 @@
 34. [Pulling data from BigQuery to Ipython Notebook](https://medium.com/john-lewis-software-engineering/authenticating-jupyter-notebook-against-bigquery-957884f78527)
 35. [Wordcloud in Python](https://www.datacamp.com/community/tutorials/wordcloud-python)
 36. [Parallel Query in Pandas](https://towardsdatascience.com/pandaral-lel-a-simple-and-efficient-tool-to-parallelize-your-pandas-operations-on-all-your-cpus-bb5ff2a409ae) 
+
+## Machine Learning – Techniques, etc.:
+1. [Basics of ML](https://www.analyticsvidhya.com/?p=18770)
+2. [ML for newbies](https://www.analyticsvidhya.com/blog/2015/06/machine-learning-basics/)
+3. [Sampling Techniques](https://www.analyticsvidhya.com/blog/2019/09/data-scientists-guide-8-types-of-sampling-techniques/)
+4. [KNN for Regression](https://www.analyticsvidhya.com/?p=46495)
+5. [Google datasets Search](https://www.analyticsvidhya.com/?p=46839)
+6. [Graph Theory](https://www.analyticsvidhya.com/av/?p=47116)
+7. [Commonly used ML algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/)
+8. [Graph Theory](https://www.analyticsvidhya.com/blog/2018/04/introduction-to-graph-theory-network-analysis-python-codes/)
+9. [Using Graphs to identify influencers](https://www.analyticsvidhya.com/blog/2020/03/using-graphs-to-identify-social-media-influencers/)
+10. [Feature Extraction from Graphs using DeepWalk](https://www.analyticsvidhya.com/blog/2019/11/graph-feature-extraction-deepwalk/)
+11. [Polynomial Regression in Python](https://www.analyticsvidhya.com/blog/2020/03/polynomial-regression-python/)
+12. [Support Vector Regression](https://www.analyticsvidhya.com/blog/2020/03/support-vector-regression-tutorial-for-machine-learning/)
+13. [Hyperparameter tuning for Random Forest](https://www.analyticsvidhya.com/blog/2020/03/beginners-guide-random-forest-hyperparameter-tuning/)
+14. [Time Series](https://www.analyticsvidhya.com/?p=46681)
+15. [Multivariate Time Series](https://www.analyticsvidhya.com/?p=47413)
+16. [Time Series](https://medium.com/@stallonejacob/time-series-forecast-a-basic-introduction-using-python-414fcb963000)
+17. [Regime Shift Models – Time Series Modelling](https://www.analyticsvidhya.com/blog/2019/10/regime-shift-models-time-series-modeling-financial-markets/)
+18. [Sequence Prediction](https://www.analyticsvidhya.com/blog/2018/04/guide-sequence-prediction-using-compact-prediction-tree-python/?utm_source=linkedin.com&utm_medium=social)
+19. [Hierarchical clustering](https://www.analyticsvidhya.com/blog/2019/05/beginners-guide-hierarchical-clustering/)
+20. [Getting Started with NLP](https://www.analyticsvidhya.com/blog/2019/07/how-get-started-nlp-6-unique-ways-perform-tokenization/)
+21. [Dimensionality Reduction Singular Value Decomposition (SVD)](https://www.analyticsvidhya.com/blog/2019/08/5-applications-singular-value-decomposition-svd-data-science/)
+22. [6 Pretrained Models for Text Classification (NLP)](https://www.analyticsvidhya.com/blog/2020/03/6-pretrained-models-text-classification/)
+23. [spaCy Tutorial for NLP](https://www.analyticsvidhya.com/blog/2020/03/spacy-tutorial-learn-natural-language-processing/)
+24. [Pretrained Word Embeddings for NLP](https://www.analyticsvidhya.com/blog/2020/03/pretrained-word-embeddings-nlp/)
+25. [Model Evaluation Metrics for ML](https://www.analyticsvidhya.com/blog/2019/08/11-important-model-evaluation-error-metrics/)
+26. [Removing Stopwords and Performing Text Normalization](https://www.analyticsvidhya.com/blog/2019/08/how-to-remove-stopwords-text-normalization-nltk-spacy-gensim-python/)
+27. [Comprehensive Guide to K-Means Clustering](https://www.analyticsvidhya.com/blog/2019/08/comprehensive-guide-k-means-clustering/)
+28. [Gaussian Mixture Models for better Clustering](https://www.analyticsvidhya.com/blog/2019/10/gaussian-mixture-models-clustering/)
+29. [Topic Modelling](https://www.analyticsvidhya.com/blog/2016/08/beginners-guide-to-topic-modeling-in-python/)
+30. [Topic Modelling](https://www.analyticsvidhya.com/blog/2018/10/stepwise-guide-topic-modeling-latent-semantic-analysis/)
+31. [Comet.ML is the GitHub for Machine Learning Models](https://www.analyticsvidhya.com/blog/2018/04/comet-ml-is-the-github-for-machine-learning-models/)
+32. [Complete Guide to Parameter Tuning in Gradient Boosting (GBM) in Python](https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/)
+33. [6 Model Interpretability modules](https://www.analyticsvidhya.com/blog/2020/03/6-python-libraries-interpret-machine-learning-models/)
+34. [ARIMA](Understand ARIMA and tune P, D, Q | Kaggle)
+35. [XGBoost classification](https://www.kaggle.com/sn3fru/the-simple-xgboost-application-with-auc-89)
