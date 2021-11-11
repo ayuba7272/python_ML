@@ -75,5 +75,66 @@
 31. [Comet.ML is the GitHub for Machine Learning Models](https://www.analyticsvidhya.com/blog/2018/04/comet-ml-is-the-github-for-machine-learning-models/)
 32. [Complete Guide to Parameter Tuning in Gradient Boosting (GBM) in Python](https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/)
 33. [6 Model Interpretability modules](https://www.analyticsvidhya.com/blog/2020/03/6-python-libraries-interpret-machine-learning-models/)
-34. [ARIMA](Understand ARIMA and tune P, D, Q | Kaggle)
+34. [ARIMA : Understand ARIMA and tune P, D, Q](https://www.kaggle.com/sumi25/understand-arima-and-tune-p-d-q)
 35. [XGBoost classification](https://www.kaggle.com/sn3fru/the-simple-xgboost-application-with-auc-89)
+
+## Statistics:
+1. [**Best Resource** for basic stats](https://www.statisticshowto.com/probability-and-statistics/)
+2. [Linear Algebra](https://www.analyticsvidhya.com/blog/2019/07/10-applications-linear-algebra-data-science/)
+3. [T-Test](https://www.analyticsvidhya.com/blog/2019/05/statistics-t-test-introduction-r-implementation/)
+4. [Central Limit Theorem](https://www.analyticsvidhya.com/blog/2019/05/statistics-101-introduction-central-limit-theorem/)
+5. [Inferential stats](https://www.analyticsvidhya.com/blog/2017/01/comprehensive-practical-guide-inferential-statistics-data-science/?utm_source=linkedin.com&utm_medium=social)
+6. [Hypothesis testing](https://www.analyticsvidhya.com/blog/2015/09/hypothesis-testing-explained/?utm_source=linkedin.com&utm_medium=social)
+7. [Chi Square Test](https://www.analyticsvidhya.com/blog/2019/11/what-is-chi-square-test-how-it-works/)
+8. [Multicollinearity](https://www.analyticsvidhya.com/blog/2020/03/what-is-multicollinearity/)
+9. [Intro to Annova](https://www.analyticsvidhya.com/blog/2018/01/anova-analysis-of-variance/?utm_source=linkedin.com&utm_medium=social)
+10. [Non parametric stats tests](https://www.analyticsvidhya.com/blog/2017/11/a-guide-to-conduct-analysis-using-non-parametric-tests/?utm_source=linkedin.com&utm_medium=social)
+11. [Basic stats using R](https://www.analyticsvidhya.com/blog/2015/10/inferential-descriptive-statistics-beginners-r/?utm_source=linkedin.com&utm_medium=social)
+12. [Introduction to Markov chain](https://www.analyticsvidhya.com/blog/2014/07/markov-chain-simplified/)
+13. [Business case using simple Markov Chain](https://www.analyticsvidhya.com/blog/2014/07/solve-business-case-simple-markov-chain/)
+14. [Design of Experiments](https://www.analyticsvidhya.com/blog/2015/10/guide-design-of-experiments-case-study/)
+15. [A/B Testing](https://medium.com/swlh/the-ultimate-guide-to-a-b-testing-part-1-experiment-design-8315a2470c63)
+16. [A/B Testing](https://towardsdatascience.com/the-ultimate-guide-to-a-b-testing-part-2-data-distributions-5ed429abbce)
+17. [A/B Testing](https://towardsdatascience.com/the-ultimate-guide-to-a-b-testing-part-3-parametric-tests-2c629e8d98f8)
+18. [A/B Testing](https://towardsdatascience.com/the-ultimate-guide-to-a-b-testing-part-4-non-parametric-tests-4db7b4b6a974)
+19. [A/B Testing](https://towardsdatascience.com/the-ultimate-guide-to-a-b-testing-part-4-bayesian-approach-binomial-variables-aa71e25d2165)
+
+## Deep Learning:
+1. [Fundamentals of Deep Learning](https://www.analyticsvidhya.com/?p=39179)
+2. [Face Detection](https://www.analyticsvidhya.com/blog/2018/12/introduction-face-detection-video-deep-learning-python)
+3. [Comprehensive path to Deep learning](https://www.analyticsvidhya.com/?p=49010)
+4. [Emotion detector](https://github.com/amineHorseman/facial-expression-recognition-using-cnn)
+5. [Computer Vision Tutorial](https://www.analyticsvidhya.com/blog/2019/07/computer-vision-implementing-mask-r-cnn-image-segmentation/)
+6. [Computer Vision Tutorial](https://www.analyticsvidhya.com/blog/2019/04/introduction-image-segmentation-techniques-python/)
+7. [Build your First Image Classification Model](https://www.analyticsvidhya.com/blog/2019/01/build-image-classification-model-10-minutes/)
+8. [Deep learning beginner](https://www.linkedin.com/pulse/deep-learning-resources-study-path-aspiring-data-srivatsan-srinivasan/)
+9. [Visualize Artificial Neural Networks (ANNs)](https://www.analyticsvidhya.com/blog/2018/04/python-library-visualizes-artificial-neural-networks/)
+10. [Visualizing ANNs](https://towardsdatascience.com/visualizing-artificial-neural-networks-anns-with-just-one-line-of-code-b4233607209e)
+11. [TensorFlow 101](https://www.analyticsvidhya.com/blog/2017/03/tensorflow-understanding-tensors-and-graphs/)
+
+## Big Data: 
+1. [Apache Spark using Scala](https://www.analyticsvidhya.com/blog/2017/01/scala/)
+2. [Apache Spark using PySpark](https://www.analyticsvidhya.com/blog/2016/09/comprehensive-introduction-to-apache-spark-rdds-dataframes-using-pyspark/)
+3. [5 things Big Data CAN/CANNOT do](https://www.analyticsvidhya.com/blog/2015/11/5-big-data-can-cannot/)
+4. [Must read books for Big Data](https://www.analyticsvidhya.com/blog/2015/10/books-big-data-hadoop-apache-spark/)
+5. [Comprehensive list of resources](https://www.analyticsvidhya.com/blog/2018/11/data-engineer-comprehensive-list-resources-get-started/)
+6. [A practical introduction to Spark’s Column](https://medium.com/@achilleus/https-medium-com-achilleus-a-practical-introduction-to-sparks-column-3f5fe83125c9)
+7. [AWS – Notebooks](https://aws.amazon.com/blogs/big-data/emr-notebooks-a-managed-analytics-environment-based-on-jupyter-notebooks/)
+
+## Geographical Visualizations:
+1. [Geopandas](http://jonathansoma.com/lede/foundations-2017/classes/geopandas/mapping-with-geopandas/)
+2. [Geopandas](https://www.kaggle.com/learn/geospatial-analysis)
+3. [Folium](https://www.analyticsvidhya.com/blog/2020/06/guide-geospatial-analysis-folium-python/)
+
+## Excel-VBA:
+1. [VBA Examples](https://www.automateexcel.com/vba-code-examples/)
+2. [VBA Examples](https://www.excel-easy.com/vba.html)
+3. [VBA Examples](https://excelchamps.com/blog/useful-macro-codes-for-vba-newcomers/)
+
+## Interview Preparation Links:
+1. [50 data structure and algorithm questions](https://hackernoon.com/50-data-structure-and-algorithms-interview-questions-for-programmers-b4b1ac61f5b0)
+2. [40 Questions on Probability for data science](https://www.analyticsvidhya.com/blog/2017/04/40-questions-on-probability-for-all-aspiring-data-scientists/)
+3. [Data Science Interview Questions](https://www.analyticsvidhya.com/blog/2016/07/20-challenging-job-interview-puzzles-which-every-analyst-solve-atleast/?utm_source=blog&utm_medium=6-essential-tips-should-know-day-before-data-science-interview)
+4. [Glossary data science](https://www.analyticsvidhya.com/glossary-of-common-statistics-and-machine-learning-terms/?utm_source=blog&utm_medium=6-essential-tips-should-know-day-before-data-science-interview)
+5. [Data Science Interviews](https://www.analyticsvidhya.com/blog/2019/02/7-step-process-ace-data-science-interviews/)
+6. [Logistic Regression Interview](https://www.analyticsvidhya.com/blog/2017/08/skilltest-logistic-regression/)
