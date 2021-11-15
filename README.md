@@ -1,7 +1,7 @@
 # Common Functions used in ML (Python)
 ### **[This file](https://github.com/ayuba7272/python_ML/blob/master/pyFunctions.py)** contains some very common functions used while coding for reference. The notebooks demonstrating each of the functions are can be found at the following links (*Notebooks are still WIP for all functions*):
 1. [Regression Model Performance](https://github.com/ayuba7272/python_ML/blob/master/notebooks/Regression%20Evaluation%20Function.ipynb)
-2. [Classification Model Performance](https://github.com/ayuba7272/python_ML/blob/master/notebooks/Binary%20Classification%20Evaluation%20Function.ipynb) (*Binary Classification*)
+2. [Binary Classification Model Performance](https://github.com/ayuba7272/python_ML/blob/master/notebooks/Binary%20Classification%20Evaluation%20Function.ipynb) 
 3. [Exploratory Data Analaysis](https://github.com/ayuba7272/python_ML/blob/master/notebooks/Data%20Exploration.ipynb)
     - Nulls in different columns of a dataframe
     - Object Columns in a dataframe
