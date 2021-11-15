@@ -328,6 +328,39 @@ SV1;\
 
 ############################################################################################################################
 
+#Stanadard Scaler Transformation
+
+def std_scaler_transform (train_df, scaler_path = 'std_scaler', test_transform = False):
+    '''
+    This function performs a standard scaler transformation on all columns of train_df and saves the transformer to 'scaler_path'
+    Parameters:
+        train_df       : Dataframe with the columns to be transformed (numeric columns)
+        scaler_path    : The PATH at which the scaler is saved, this can be used later to tranform the test data as well. Default name = 'std_scaler'
+        test_transform : Boolean, Default False; When set to True, the function uses an earlier saved scaler transformation function to transform the test dataset
+        
+    Returns : Transformed Dataframe
+    '''
+    import joblib
+    from sklearn.preprocessing import StandardScaler
+    ss_name = scaler_path+".pkl"
+    
+    if test_transform == False:
+        # We save the transformer as it helps to transform the test data later
+        ss = StandardScaler()
+        ss.fit(X_train)
+        joblib.dump(ss,ss_name)
+        ss=joblib.load(ss_name)
+        X_tr = pd.DataFrame(ss.transform(X_train),columns=X_train.columns)
+        return X_tr        
+    else:
+        # While evaluating the model - To transform the Test X
+        ss=joblib.load(ss_name)
+        X_tr = pd.DataFrame(ss.transform(X_test),columns=X_test.columns)
+        
+    return X_tr
+
+############################################################################################################################
+
 # Changing skewed distribution to a normal distribution
 
 def box_cox_transform(feature=None, lambda_ = 0.25 , reverse = False ):
@@ -402,7 +435,7 @@ def get_samples(df, num_samples, sample_size = None, stratify = None, seed = 123
 
 ############################################################################################################################
 
-def one_hot_encoding(df,column_name,prefix=None):
+def one_hot_encoder(df,column_name,prefix=None):
     '''
     This function created one hot encoded dummy variable for any given column_name
     Parameters:
@@ -413,7 +446,7 @@ def one_hot_encoding(df,column_name,prefix=None):
         Dataframe with the added on-hot encoded columns
     '''
     if prefix == None: prefix = coulmn_name
-    return pd.concat([df,pd.get_dummies(df['service_area_name'], prefix=prefix)],axis=1)
+    return pd.concat([df,pd.get_dummies(df[column_name], prefix=prefix)],axis=1)
 
 ############################################################################################################################
 
