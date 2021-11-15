@@ -7,7 +7,7 @@
     - Object Columns in a dataframe
     - Univariate Distribution of features
     - Correlations
-4. [Data Transformation] (*Coming Soon...*)
+4. [Data Transformation](https://github.com/ayuba7272/python_ML/blob/master/notebooks/Data%20Transformation.ipynb)
     - One-hot encoding function
     - Box-Cox Transform - Normalized distribution of the target variable 
     - Binning Function - To divide a feature into equally sized bins
