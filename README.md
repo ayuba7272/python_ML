@@ -2,16 +2,17 @@
 ### **[This file](https://github.com/ayuba7272/python_ML/blob/master/pyFunctions.py)** contains some very common functions used while coding for reference. The notebooks demonstrating each of the functions are can be found at the following links (*Notebooks are still WIP for all functions*):
 1. [Regression Model Performance](https://github.com/ayuba7272/python_ML/blob/master/notebooks/Regression%20Evaluation%20Function.ipynb)
 2. [Classification Model Performance](https://github.com/ayuba7272/python_ML/blob/master/notebooks/Binary%20Classification%20Evaluation%20Function.ipynb) (*Binary Classification*)
-3. Univariate Distribution of a particular variable (*Coming Soon...*)
-4. [Correlations of all independent varaibles with target variable](https://github.com/ayuba7272/python_ML/blob/master/notebooks/Correlation%20Matrix.ipynb) 
-5. Box-Cox Transform - Normalized distribution of the target variable (*Coming Soon...*)
-6. One-hot encoding function (*Coming Soon...*)
-7. Check nulls in columns of a dataframe (*Coming Soon...*)
-8. Check how many object columns are present in a dataframe (*Coming Soon...*)
-9. Transalte function using the Google Transalte API (*Coming Soon...*)
-10. Binning Function - To divide a feature into equally sized bins (*Coming Soon...*)
-11. Stratified Sampling - Splits a dataframe into required number of samples (*Coming Soon...*)
-12. Reading data from Google BigQuery (*Coming Soon...*)
+3. [Exploratory Data Analaysis](https://github.com/ayuba7272/python_ML/blob/master/notebooks/Data%20Exploration.ipynb)
+    - Nulls in different columns of a dataframe
+    - Object Columns in a dataframe
+    - Univariate Distribution of features
+    - Correlations
+4. Box-Cox Transform - Normalized distribution of the target variable (*Coming Soon...*)
+5. One-hot encoding function (*Coming Soon...*)
+6. Transalte function using the Google Transalte API (*Coming Soon...*)
+7. Binning Function - To divide a feature into equally sized bins (*Coming Soon...*)
+8. Stratified Sampling - Splits a dataframe into required number of samples (*Coming Soon...*)
+9. Reading data from Google BigQuery (*Coming Soon...*)
 
 ---
 
