@@ -7,12 +7,14 @@
     - Object Columns in a dataframe
     - Univariate Distribution of features
     - Correlations
-4. Box-Cox Transform - Normalized distribution of the target variable (*Coming Soon...*)
-5. One-hot encoding function (*Coming Soon...*)
-6. Transalte function using the Google Transalte API (*Coming Soon...*)
-7. Binning Function - To divide a feature into equally sized bins (*Coming Soon...*)
-8. Stratified Sampling - Splits a dataframe into required number of samples (*Coming Soon...*)
-9. Reading data from Google BigQuery (*Coming Soon...*)
+4. [Data Transformation] (*Coming Soon...*)
+    - One-hot encoding function
+    - Box-Cox Transform - Normalized distribution of the target variable 
+    - Binning Function - To divide a feature into equally sized bins
+    - Standard Scaler \[ (x - mu) / sigma ]
+5. Transalte function using the Google Transalte API (*Coming Soon...*)
+6. Stratified Sampling - Splits a dataframe into required number of samples (*Coming Soon...*)
+7. Reading data from Google BigQuery (*Coming Soon...*)
 
 ---
 
