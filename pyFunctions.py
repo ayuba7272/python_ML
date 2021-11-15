@@ -1,26 +1,6 @@
 # This file contains some simple but vry useful fuctions
 
-#Function returns a correlation of all toher variables with specified target variable
-def corr_matrix (df=None,target_var='',method=None):
-    '''
-    Function returns correlation of the target variable with all the remaining variables
-    df : The dataframe with all variables
-    target_var : Variable that you wanty to check of all other vars with passed as a string
-    method : 'pearson','kendall','spearman'
-    '''
-    if method == None:
-        method = 'pearson' 
-    corr_name = method+'corr'
-    df_corr = df.corr(method)
-    var_corr = df_corr[target_var].to_frame()
-    var_corr.rename({target_var:corr_name},axis=1,inplace = True)
-    var_corr['abs_'+corr_name] = var_corr[corr_name].abs()
-    var_corr.drop(target_var,axis=0, inplace=True)
-    var_corr.sort_values('abs_'+corr_name,ascending=False,inplace=True)
-    return var_corr
-
-############################################################################################################################
-
+# to get all object columns from our dataset
 def obj_cols(df):
     '''
     This function returns the object columns in a given dataframe
@@ -31,12 +11,12 @@ def obj_cols(df):
     	List of Object columns
     '''
     object_cols = df.select_dtypes(include = ['object']).columns
-    print('Count of object columns: {}'.format(object_cols.shape[0]))
     if object_cols.shape[0]>0 : 
-    	return list(object_cols.values)
+        print('Count of object columns: {}'.format(object_cols.shape[0]))
+        return list(object_cols.values)
     else:
-    	print('No object columns in the dataframe!')
-    	return
+        print('No object columns in the dataframe!')
+        return
 
 ############################################################################################################################
 
@@ -163,20 +143,23 @@ def regression_eval(y_true,y_pred,thrs=0,predictors=0):
 ############################################################################################################################
 
 def show_distribution(df=None,variable_name='',
-                      pctl = [0.01, 0.09, 0.25, 0.30 , 0.33, 0.40 , 0.50 , 0.60 , 0.67, 0.75, 0.80 , 0.90 , 0.99], 
-                      plot= True, bins = 50):
+                      pctl = [1, 10, 20, 25, 30 , 33, 40 , 50 , 60 , 67, 70, 75, 80 , 90 , 99], 
+                      plot= True, bins = 50,
+                      decimals_ = 2):
     '''
     This function shows the distribution (Histogram plot) of any variable and returns some important percentile values of the variable
     Parameters:
         df            : The pandas dataframe that contains this variable data
         varaible_name : String, Name of the variable for which the distribution should be shown
-        pctl          : List of Percentile values that should be returned (0 to 1 in multiples of 0.01)
+        pctl          : List of Percentile values that should be returned (1 to 100 in multiples of 1)
         plot          : Boolean, Default True; Will plot a histogram if set to True
         bins          : The number of bins into which the data should be plotted on the histogram
+        decimals_     : # of decimals shown for the varaible
     '''
     percentil = df[variable_name].quantile(np.linspace(.01, 1, 99, 0), 'lower')
-    op = percentil[pctl]
-    op = op.to_frame().reset_index()
+    op = percentil.to_frame().reset_index()
+    op.index = op.index+1.
+    op = op[op.index.isin(pctl)]
     op.rename(columns = {'index': 'Percentile'},inplace=True)
     op.loc[len(op.index)] = [0, df[variable_name].min()]
     op.loc[len(op.index)] = [1, df[variable_name].max()]
@@ -184,12 +167,121 @@ def show_distribution(df=None,variable_name='',
     op.loc[len(op.index)] = ['AVG', df[variable_name].mean()]
     op.sort_values(by=[variable_name,'Percentile'],inplace = True)
     op.reset_index(inplace=True,drop=True)
-    op[variable_name] = op[variable_name].round(2)
+    op[variable_name] = op[variable_name].round(decimals_)
     if plot == True:
         plt.figure(figsize = (20,8))
-        sns.distplot(x=df[variable_name], bins = bins)
+        sns.histplot(x=df[variable_name], bins = bins, kde= True)
     return op
 
+############################################################################################################################
+
+def show_distribution_multi_var(df=None,variable_names=[''],
+                      pctl = [1, 10, 20, 25, 30 , 33, 40 , 50 , 60 , 67, 70, 75, 80 , 90 , 99], 
+                      plot = True,
+                      decimals_ = 2):
+    '''
+    This function shows the distribution (box-plots) of a list of variables and returns some important percentile values of the variable
+    Parameters:
+        df            : The pandas dataframe that contains this variable data
+        varaible_name : List of strings, Names of the variables for which the distribution should be shown. If this is not provided, all numerical columns will be shown
+        pctl          : List of Percentile values that should be returned (1 to 100 in multiples of 1)
+        plot          : Boolean, Default True; Will plot a histogram if set to True
+        decimals_     : # of decimals shown for the varaible
+    '''
+    if variable_names==['']: vars_ = df.select_dtypes(include='number').columns.values
+    else: vars_ = variable_names
+    list_ = []
+    for v in vars_:
+        percentil = df[v].quantile(np.linspace(.01, 1, 99, 0), 'lower')
+        op = percentil.to_frame().reset_index()
+        op.index = op.index+1.
+        op = op[op.index.isin(pctl)]
+        op.rename(columns = {'index': 'Percentile'},inplace=True)
+        op.loc[len(op.index)] = [0, df[v].min()]
+        op.loc[len(op.index)] = [1, df[v].max()]
+        op['Percentile'] = 'p_'+ (op['Percentile']*100).astype(int).astype(str).str.zfill(2)
+        op.loc[len(op.index)] = ['AVG', df[v].mean()]
+        op.sort_values(by=[v,'Percentile'],inplace = True)
+        op.reset_index(inplace=True,drop=True)
+        op[v] = op[v].round(decimals_)
+        list_.append(op)    
+    #Box-Plots
+    if plot == True:
+        sns.boxplot(x="variable", y="value", data=pd.melt(df[vars_]), palette="Set3")
+    from functools import reduce
+    op_df = reduce(lambda df1,df2: pd.merge(df1,df2,on='Percentile'), list_)
+    return op_df
+
+############################################################################################################################
+
+def box_plots_univariate_by_category(df = None, numeric_var ='', categorical_var = '', categorical_var2 = '' ):
+    '''
+    This function creates box-plots for a single numeric variable divided by categorical variables.
+    It allows for a secondary categorical variable 
+    Parameters:
+        df               : The dataframe which contains the data
+        numeric_var      : The target numberic variable for which we are viewing the distribution
+        categorical_var  : The categorical varibale by which the distribution is to be split (ideally not more than 5 categories)
+        categorical_var2 : The categorical varibale by which the first category is further split (ideally not more than 3 categories)
+    '''
+    sns.set_style("whitegrid")
+    plt.figure(figsize = (20,8))
+    if categorical_var2 == '':
+        ax = sns.boxplot(x=categorical_var, y=numeric_var, data=df, palette="Set2")
+    else:
+        ax = sns.boxplot(x=categorical_var, y=numeric_var, hue = categorical_var2, data=df, palette="Set2")
+
+############################################################################################################################
+
+#Function returns a correlation of all other variables with specified target variable
+def target_corr (df=None,target_var='',method=None):
+    '''
+    Function returns correlation of the target variable with all the remaining variables
+    
+    Parameters:
+        df : The dataframe with all variables
+        target_var : Variable that you wanty to check of all other vars with passed as a string
+        method : 'pearson','kendall','spearman'
+    
+    Returns:
+        Dataframe with 
+    '''
+    if method == None:
+        method = 'pearson' 
+    corr_name = method+'corr'
+    df_corr = df.corr(method)
+    var_corr = df_corr[target_var].to_frame()
+    var_corr.rename({target_var:corr_name},axis=1,inplace = True)
+    var_corr['abs_'+corr_name] = var_corr[corr_name].abs()
+    var_corr.drop(target_var,axis=0, inplace=True)
+    var_corr.sort_values('abs_'+corr_name,ascending=False,inplace=True)
+    return var_corr
+
+############################################################################################################################
+
+#Function to show correlation matrix between all variables
+def corr_matrix (df=None,method=None,show_values = True, return_flag = False):
+    '''
+    Function returns correlation of all variables with each other
+    
+    Parameters:
+        df          : The dataframe with all variables
+        method      : 'pearson','kendall','spearman'; Default is 'pearson'
+        show_values : Boolean, Default True
+    
+    Returns:
+        Correlation Matrix dataframe, if return_flag set to True. Returns nothing by default
+    '''
+    if method == None:
+        method = 'pearson' 
+    corr_name = method+'corr'
+    df_corr = df.corr(method)
+    plt.figure(figsize = (12,10))
+    if show_values == True: sns.heatmap(df_corr,cmap = 'coolwarm',annot=True)
+    else: sns.heatmap(df_corr,cmap = 'coolwarm')
+    
+    if return_flag == True: return df_corr
+    else : return
 
 ############################################################################################################################
 
