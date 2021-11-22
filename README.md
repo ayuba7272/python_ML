@@ -131,6 +131,7 @@ I have listed some amazing resources that have common in handy for me at differe
 9. [Visualize Artificial Neural Networks (ANNs)](https://www.analyticsvidhya.com/blog/2018/04/python-library-visualizes-artificial-neural-networks/)
 10. [Visualizing ANNs](https://towardsdatascience.com/visualizing-artificial-neural-networks-anns-with-just-one-line-of-code-b4233607209e)
 11. [TensorFlow 101](https://www.analyticsvidhya.com/blog/2017/03/tensorflow-understanding-tensors-and-graphs/)
+12. [Self-Attention Illustrated](https://towardsdatascience.com/illustrated-self-attention-2d627e33b20a)
 
 ## Big Data: 
 1. [Apache Spark using Scala](https://www.analyticsvidhya.com/blog/2017/01/scala/)
