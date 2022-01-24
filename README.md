@@ -159,3 +159,12 @@ I have listed some amazing resources that have common in handy for me at differe
 4. [Glossary data science](https://www.analyticsvidhya.com/glossary-of-common-statistics-and-machine-learning-terms/?utm_source=blog&utm_medium=6-essential-tips-should-know-day-before-data-science-interview)
 5. [Data Science Interviews](https://www.analyticsvidhya.com/blog/2019/02/7-step-process-ace-data-science-interviews/)
 6. [Logistic Regression Interview](https://www.analyticsvidhya.com/blog/2017/08/skilltest-logistic-regression/)
+
+## Other useful resources
+1. [CRON Tab](https://crontab.guru/)
+2. [JSON Blob](https://jsonblob.com/)
+3. [Team Game - Mafia online](https://mafia.gg/)
+4. {Asana - Project Management](https://asana.com/)
+5. [Airflow - Clockwork Scheduler](https://airflow.apache.org)
+6. [Sourcetree - Git GUI](https://www.sourcetreeapp.com/)
+7. [Confluence](https://www.atlassian.com/software/confluence)
