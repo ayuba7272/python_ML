@@ -164,7 +164,7 @@ I have listed some amazing resources that have common in handy for me at differe
 1. [CRON Tab](https://crontab.guru/)
 2. [JSON Blob](https://jsonblob.com/)
 3. [Team Game - Mafia online](https://mafia.gg/)
-4. {Asana - Project Management](https://asana.com/)
+4. [Asana - Project Management](https://asana.com/)
 5. [Airflow - Clockwork Scheduler](https://airflow.apache.org)
 6. [Sourcetree - Git GUI](https://www.sourcetreeapp.com/)
 7. [Confluence](https://www.atlassian.com/software/confluence)
