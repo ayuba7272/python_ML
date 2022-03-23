@@ -11,7 +11,7 @@
     - One-hot encoding function
     - Box-Cox Transform - Normalized distribution of the target variable 
     - Binning Function - To divide a feature into equally sized bins
-    - Standard Scaler \[ (x - mu) / sigma ]
+    - Standard Scaler \[ (x - \[\mu\]) / \[\sigma\] ]
 5. Transalte function using the Google Transalte API (*Coming Soon...*)
 6. Stratified Sampling - Splits a dataframe into required number of samples (*Coming Soon...*)
 7. Reading data from Google BigQuery (*Coming Soon...*)
