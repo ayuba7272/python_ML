@@ -19,7 +19,7 @@
 ---
 
 # Other Useful resources:
-A wise man/woman once said, "It is *not important to know everything, but it is important to know where to seek knowledge* about everything".
+A wise person once said, "It is *not important to know everything, but it is important to know where to seek knowledge* about everything".
 I have listed some amazing resources that have common in handy for me at different points in my career and I will keep updating this list. I have gone through almost all of the articles mentioned below and can vouch that they have been very useful while working on various topics at different points in my career.
 
 ## Python for Machine Learning – Data Collection, EDA, Feature engineering, etc.:
