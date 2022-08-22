@@ -660,3 +660,21 @@ def pca_fn(df, variance = None, n_comp = None):
     return pca_df
 
 ############################################################################################################################
+def progress_bar(i,imax,progressbar_length=20):
+    '''
+    This function returns the progress of a loop
+    PARAMETERS:
+        i = The current iteration
+        imax = Max. number of iterations
+        progressbar_length = Lenght of the progress bar
+        
+    EXAMPLE:
+        print(progress_bar(2,5)) --> This will print 40% as the progress
+    '''
+    prog = i/imax
+    progress = round((i*progressbar_length/imax))
+    remainder = progressbar_length-progress
+    progress_bar = "PROGRESS : {:2.0%} Complete \t|{}{}|         \r".format(prog,progress*'*',remainder*' ')
+    return (progress_bar)
+    
+############################################################################################################################
