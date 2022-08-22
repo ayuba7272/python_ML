@@ -678,3 +678,49 @@ def progress_bar(i,imax,progressbar_length=20):
     return (progress_bar)
     
 ############################################################################################################################
+
+#function to plot elbow curve
+def plot_elbow_curve_kmeans(k_range = [1,10],data = None, return_flag = False):
+    '''
+    '''
+    #importing required modules
+    from kneed import KneeLocator
+    from sklearn.cluster import KMeans
+    
+    #Initializing a basic kmeans algorithm
+    kmeans_kwargs = {
+        "init": "random",
+        "n_init": 10,
+        "max_iter": 300,
+        "random_state": 42,
+    }
+    
+    # A list holds the SSE values for each k
+    sse = []
+    for k in range(k_range[0], k_range[1]+1):
+        kmeans = KMeans(n_clusters=k, **kmeans_kwargs)
+        kmeans.fit(data)
+        sse.append(kmeans.inertia_)
+        print ('Running for k = {}'.format(k), end="\r")
+        
+    #Locating the elbow
+    kl = KneeLocator(range(k_range[0], k_range[1]+1), sse, curve="convex", direction="decreasing")
+    e = kl.elbow
+    print('Ideal number of clusters (k) = {} '.format(e))
+    
+    #plotting the elbow curve
+    plt.style.use("fivethirtyeight")
+    plt.plot(range(k_range[0], k_range[1]+1), sse)
+    plt.plot(e,sse[e-1],'r8', markersize = 15)
+    plt.xticks(range(k_range[0], k_range[1]+1))
+    plt.xlabel("Number of Clusters")
+    plt.ylabel("SSE")
+    plt.title('Elbow curve for k-means clustering', fontsize=18)
+    plt.show()
+    
+    if return_flag ==True : return e
+
+# Example Usage
+#e = plot_elbow_curve_kmeans(k_range = [1,10],data = pca_df,return_flag = True)
+    
+############################################################################################################################
