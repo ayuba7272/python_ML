@@ -632,9 +632,10 @@ def read_sql_BQ(BQ_query = 'select 1 as Sample', project_id = "", KEY_PATH = "/h
 ############################################################################################################################
 
 #Function for running PCA
-def pca_fn(df, variance = None, n_comp = None):
-	'''
-    This function performs a PCA on the input dataframe and returns a dataframe with the resultant principal components 
+    
+def pca_fn(df, variance = 0.9, n_comp = None):
+    '''
+   This function performs a PCA on the input dataframe and returns a dataframe with the resultant principal components and also the PCA fit function
 	Parameters:
 		df		: Pandas DataFrame with numerical features
 		variance: Optional; The total variance to be captured by the principal components
@@ -642,22 +643,22 @@ def pca_fn(df, variance = None, n_comp = None):
 					failing which the algorithm will run assuming a required explained variation by the principal components of 0.9 
     '''
     from sklearn.decomposition import PCA
-	variance = 0.9
-	print('Total columns in Input Dataframe : {}'.format(df.shape[1]))
-	df = df.select_dtypes(['int','float'])
-	print('Columns in Input Dataframe that are considered for PCA : {}'.format(df.shape[1]))
-	if isinstance(n_comp, int):
-		pca = PCA(n_comp)
+    print('Total columns in Input Dataframe : {}'.format(df.shape[1]))
+    df = df.select_dtypes(['int','float'])
+    print('Columns in Input Dataframe that are considered for PCA : {}'.format(df.shape[1]))
+    if isinstance(n_comp, int):
+        pca = PCA(n_comp)
     else:
         pca = PCA(variance)
- 
+    
     pca.fit(df)
-	n_comp = pca.n_components_
-	print('Input Dataframe with {} columns has been reduced to {} principal components!'.format(df.shape[1],n_comp))
-	print('Explained Variation with {} principal components: {}'.format(n_comp,sum(pca.explained_variance_ratio_)))
-	pca_df = pd.DataFrame(data = pca.transform(df), columns = ['pca_col_'+str(x+1) for x in range(n_comp)], index = df.index)
-
-    return pca_df
+    
+    n_comp = pca.n_components_
+    print('Input Dataframe with {} columns has been reduced to {} principal components!'.format(df.shape[1],n_comp))
+    print('Explained Variation with {} principal components: {}'.format(n_comp,sum(pca.explained_variance_ratio_)))
+    
+    pca_df = pd.DataFrame(data = pca.transform(df), columns = ['pca_col_'+str(x+1) for x in range(n_comp)], index = df.index)
+    return [pca_df,pca]
 
 ############################################################################################################################
 def progress_bar(i,imax,progressbar_length=20):
