@@ -632,7 +632,6 @@ def read_sql_BQ(BQ_query = 'select 1 as Sample', project_id = "", KEY_PATH = "/h
 ############################################################################################################################
 
 #Function for running PCA
-    
 def pca_fn(df, variance = 0.9, n_comp = None):
     '''
    This function performs a PCA on the input dataframe and returns a dataframe with the resultant principal components and also the PCA fit function
@@ -681,8 +680,17 @@ def progress_bar(i,imax,progressbar_length=20):
 ############################################################################################################################
 
 #function to plot elbow curve
+
+!pip install kneed
+# Import module for k-means cluster
+from kneed import KneeLocator
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import StandardScaler
+
 def plot_elbow_curve_kmeans(k_range = [1,10],data = None, return_flag = False):
     '''
+    This function returns the ideal number of clusters required to explain the given vairance in the data
     '''
     #importing required modules
     from kneed import KneeLocator
@@ -724,4 +732,54 @@ def plot_elbow_curve_kmeans(k_range = [1,10],data = None, return_flag = False):
 # Example Usage
 #e = plot_elbow_curve_kmeans(k_range = [1,10],data = pca_df,return_flag = True)
     
+############################################################################################################################
+#Taking 5 samples and calculating avg. Silhoutte Score
+kmeans_labels = kmeans.labels_
+def sample_silihoutte_score(df= None, kmeans_labels = None, n_samples = 5,  sample_size = 50000):
+    '''
+    This function samples the given dataframe with the cluster labels and calculates the silhoutte score for each sample and returns average score for the model
+    PARAMETERS:
+        df : The dataframe with all records and features
+        kmeans_labels : The labels for the clusters
+        n_samples : Number of samples to be taken for calculating the avg. score
+        sample_size : Numnber of records from the data that should be selected in each of the samples
+    '''
+    sil_scores_list = []
+    for i in range(n_samples):
+        print ('Running for iteration {} of {}'.format(i,n_samples), end="\r")
+        x = df.copy()
+        x['c_label'] = kmeans_labels
+        x = x.sample(sample_size)
+        sil_scores_list.append(silhouette_score(x.loc[:, x.columns != 'c_label'], x['c_label']).round(2))
+        del(x)
+        
+    print('Silhoute Score for the Clustering:',np.mean(sil_scores_list))
+
+############################################################################################################################
+#Function to visualize clusters
+def draw_umap(data = None, n_neighbors=15, min_dist=0.1, n_components=2, metric='euclidean', title='' , viz_metric = ''):
+    import umap
+    fit = umap.UMAP(
+        n_neighbors=n_neighbors,
+        min_dist=min_dist,
+        n_components=n_components,
+        metric=metric
+    )
+    u = fit.fit_transform(data);
+    fig = plt.figure(figsize=(8, 6), dpi=80)
+    if n_components == 1:
+        ax = fig.add_subplot(111)
+        scatter = ax.scatter(u[:,0], range(len(u)), c=data[viz_metric])
+    if n_components == 2:
+        ax = fig.add_subplot(111)
+        scatter = ax.scatter(u[:,0], u[:,1], c=data[viz_metric])
+    if n_components == 3:
+        #interactive plotting in separate window 
+        ax = fig.add_subplot(111, projection='3d')
+        scatter = ax.scatter(u[:,0], u[:,1], u[:,2], s=100, c=data[viz_metric])
+    legend1 = ax.legend(*scatter.legend_elements(),
+                    loc="upper right", title="Segments")
+    ax.add_artist(legend1)
+    plt.title(title, fontsize=18)
+
 ############################################################################################################################
