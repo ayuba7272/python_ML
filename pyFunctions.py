@@ -783,3 +783,23 @@ def draw_umap(data = None, n_neighbors=15, min_dist=0.1, n_components=2, metric=
     plt.title(title, fontsize=18)
 
 ############################################################################################################################
+def viz_binary_class_distribution(data = None, var = None,x_labels=[0,1], title = 'Binomial Distribution' ):
+    '''
+    The function plots the distribution of a binomial variable with 0/1 labels
+    PARAMETERS:
+        data: Dataframe with the data to be plotted
+        var : Column Name in the data passed as a string; Binomial labels (1/0) for which the distribution needs to be plotted
+        x_labels : List of string labels for binomial classes in 0/1 order
+        title : 
+    '''
+    tot_count = data.shape[0]
+    plt.figure(figsize=(8,6))
+    sns.set_theme(style="darkgrid")
+    ax = sns.countplot(x=var, data=data, order=[0,1])
+    ax.set(xlabel = "Class", ylabel = 'Frequency')
+    ax.set_xticklabels(x_labels)
+    ax.set_title(title, y=1.03, fontsize=17)
+    for p in ax.patches:
+        ax.annotate('{}({:.1f}%))'.format(p.get_height(),p.get_height()/tot_count*100), (p.get_x()+0.2, p.get_height()+1))
+        
+############################################################################################################################
