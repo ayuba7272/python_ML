@@ -537,8 +537,8 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
     eval_metrics['Precision'] = precision
     eval_metrics['Recall'] = recall
     eval_metrics['F1 Score'] = f1_score
-    eval_metrics['ROC AUC Score'] = auc_score
-    eval_metrics['AUCPR Score'] = aucpr
+    eval_metrics['AUC-ROC Score'] = auc_score
+    eval_metrics['AUC-PR Score'] = aucpr
     eval_metrics['Log Loss / Binary Cross Entropy'] = log_loss_
 
    
@@ -570,7 +570,7 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
         ax3.set_ylabel('TPR')
         ax3.set_xlim([-0.05, 1.05])
         ax3.set_ylim([-0.05, 1.05])
-        ax3.text(-0.02,1,'AUC score: {:0.3f}'.format(auc_score))
+        ax3.text(-0.02,1,'AUC-ROC: {:0.3f}'.format(auc_score))
        
         #Plotting the Precision Recall Curve
         ax4 = fig.add_subplot(2, 2, 4)
@@ -580,7 +580,7 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
         ax4.set_ylabel('Precision')
         ax4.set_xlim([-0.05, 1.05])
         ax4.set_ylim([-0.05, 1.05])
-        ax4.text(-0.02,1,'AUCPR score: {:0.3f}'.format(aucpr))
+        ax4.text(-0.02,1,'AUC-PR score: {:0.3f}'.format(aucpr))
        
         #fig.tight_layout()
        
