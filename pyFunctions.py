@@ -524,6 +524,7 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
     specificity = TN / (FP+TN)
     f1_score = 2 * (precision * recall) / (precision + recall)
     auc_score = roc_auc_score(y_true, y_pred)
+    gini_coeff = 2*auc_score - 1
     #for calculating best threshold using tpr, fpr
     fpr, tpr, thresholds1 = roc_curve(y_true, y_pred)
     gmeans = np.sqrt(tpr * (1-fpr))  
@@ -550,6 +551,7 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
     eval_metrics['Recall'] = recall
     eval_metrics['Specificity'] = specificity
     eval_metrics['F1 Score'] = f1_score
+    eval_metrics['Gini Coefficient'] = gini_coeff
     eval_metrics['AUC-ROC Score'] = auc_score
     eval_metrics['AUC-PR Score'] = aucpr
     eval_metrics['Best Threshold (AUC-ROC)'] = best_threshold1
