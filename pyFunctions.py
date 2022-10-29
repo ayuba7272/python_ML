@@ -482,7 +482,7 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
     Reference: https://www.analyticsvidhya.com/blog/2020/09/precision-recall-machine-learning/
     Parameters:
         y_true (Numpy array) : The ground truth labels given in the dataset
-        y_pred (Numpy array) : Model prediction probability
+        y_pred (Numpy array) : Model prediction probability (Ideally get the probability and not predicted classes **logreg.predict_proba(X_test)[:,1]**) 
         prob_thrs (numeric)  : Between 0 and 1; 0.5 by default. Predicted values >= threshold are considered as positive and below are negative.
         viz                  : Returns Visualization on the classifier performance along with the metrics
         return_conf_matrix   : Returns the confusion matrix as a dataframe, Default is False
@@ -500,7 +500,7 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
         3. Categorical Cross Entropy :
    
     '''
-    if len(y_true) != len(y_true):
+    if len(y_true) != len(y_pred):
         print('Length of Actual and Predicted lists is unequal. Please check and correct the same!')
         return
    
@@ -521,10 +521,22 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
     accuracy = (TP+TN)/(TP+TN+FP+FN)
     precision = TP / (TP+FP)
     recall = TP / (TP+FN)
+    specificity = TN / (FP+TN)
     f1_score = 2 * (precision * recall) / (precision + recall)
     auc_score = roc_auc_score(y_true, y_pred)
-    fpr, tpr, t1 = roc_curve(y_true, y_pred)
-    p, r, t2 = precision_recall_curve(y_true, y_pred)
+    #for calculating best threshold using tpr, fpr
+    fpr, tpr, thresholds1 = roc_curve(y_true, y_pred)
+    gmeans = np.sqrt(tpr * (1-fpr))  
+    ix = np.argmax(gmeans)  # locate the index of the largest g-mean
+    best_threshold1 = thresholds1[ix]
+    g_mean = gmeans[ix]
+    #for calculating best threshold using F1-Score
+    p, r, thresholds2 = precision_recall_curve(y_true, y_pred)
+    fscore = (2 * p * r) / (p + r) # calculate f1 - score for different threshold values
+    ix1 = np.argmax(fscore) # locate the index of the largest f score
+    best_threshold2 = thresholds2[ix1]
+    fscore_ = fscore[ix1]
+    
     aucpr = auc(r, p)
     log_loss_ = log_loss(y_true, y_pred)
    
@@ -536,10 +548,15 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
     eval_metrics['Accuracy'] = accuracy
     eval_metrics['Precision'] = precision
     eval_metrics['Recall'] = recall
+    eval_metrics['Specificity'] = specificity
     eval_metrics['F1 Score'] = f1_score
     eval_metrics['AUC-ROC Score'] = auc_score
     eval_metrics['AUC-PR Score'] = aucpr
+    eval_metrics['Best Threshold (AUC-ROC)'] = best_threshold1
+    eval_metrics['Best Threshold (AUC-PR)'] = best_threshold2
     eval_metrics['Log Loss / Binary Cross Entropy'] = log_loss_
+    
+    #eval_metrics['G-Mean at best Threshold'] = g_mean
 
    
     # Visualizations
@@ -564,22 +581,27 @@ def binary_classification_eval(y_true,y_pred,prob_thrs=0.5,return_conf_matrix = 
        
         #Plotting the ROC-AUC Curve
         ax3 = fig.add_subplot(2, 2, 3)
-        ax3 = sns.lineplot(x = fpr, y = tpr)
+        ax3 = sns.lineplot(x = fpr, y = tpr,label='ROC Curve')
+        ax3.plot([0, 1], [0, 1],'r--',label='No Skill')
+        ax3.scatter(fpr[ix], tpr[ix], marker='o', color='black', label='Best')
         ax3.set_title('Receiver Operating Characteristic Curve')
         ax3.set_xlabel('FPR')
         ax3.set_ylabel('TPR')
         ax3.set_xlim([-0.05, 1.05])
         ax3.set_ylim([-0.05, 1.05])
+        ax3.legend(loc="lower right")
         ax3.text(-0.02,1,'AUC-ROC: {:0.3f}'.format(auc_score))
        
         #Plotting the Precision Recall Curve
         ax4 = fig.add_subplot(2, 2, 4)
-        ax4 = sns.lineplot(x = r, y = p)
+        ax4 = sns.lineplot(x = r, y = p, label='P-R Curve')
+        ax4.scatter(r[ix1], p[ix1], marker='o', color='black', label='Best')
         ax4.set_title('Precision-Recall Curve')
         ax4.set_xlabel('Recall')
         ax4.set_ylabel('Precision')
         ax4.set_xlim([-0.05, 1.05])
         ax4.set_ylim([-0.05, 1.05])
+        ax4.legend(loc="lower right")
         ax4.text(-0.02,1,'AUC-PR score: {:0.3f}'.format(aucpr))
        
         #fig.tight_layout()
