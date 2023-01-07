@@ -827,3 +827,53 @@ def viz_binary_class_distribution(data = None, var = None,x_labels=[0,1], title 
         ax.annotate('{}({:.1f}%))'.format(p.get_height(),p.get_height()/tot_count*100), (p.get_x()+0.2, p.get_height()+1))
         
 ############################################################################################################################
+#Categorical Variable Distribution
+def cat_dist(df=None,var_name='',plot=True,viz='Bar',cat_limit=5):
+    '''
+    This function shows the distribution of any categorical variable and returns some visualizations
+    Parameters:
+        df            : The pandas dataframe that contains this variable data
+        varaible_name : String, Name of the variable for which the distribution should be shown
+        plot          : Boolean, Default True; Will plot a bar/pie chart showing the distribution if set to True
+        viz           : Default will be bar chart, can also show pie chart
+        limit_cat     : In case of multiple categories, the top 5 categories will be shown by default
+    '''
+    tot_count = df.shape[0]
+    cat_df = pd.DataFrame(df[var_name].value_counts()).reset_index().rename(columns = {'index':'Category',var_name:'Frequency'})
+    cat_df.sort_values(by='Frequency', ascending=False,inplace=True,ignore_index=True)
+    cat_n = cat_df.shape[0]
+    if cat_n>cat_limit:
+        other_df = cat_df.iloc[cat_limit:]
+        other_df = other_df.sum()
+        cat_df.iloc[cat_limit] = ['Others', other_df[1]] 
+        cat_df = cat_df[:cat_limit+1]
+    cat_df['Percentage'] = cat_df['Frequency']/tot_count
+    cat_df['Percentage'] = pd.Series(["{0:.1f}%".format(round(val*100,1)) for val in cat_df['Percentage']], index = cat_df.index)
+    
+    #Visualization
+    if plot == True:
+        #sub function to format labels
+        def autopct_format(values):
+            def my_format(pct):
+                total = sum(values)
+                val = int(round(pct*total/100.0))
+                return '{:.1f}%\n({v:d})'.format(pct, v=val)
+            return my_format
+        if viz == 'Bar':
+            plt.figure(figsize=(20,8))
+            sns.set_theme(style="darkgrid")
+            ax = sns.barplot(data=cat_df, x='Category', y="Frequency")
+            ax.set(xlabel = var_name, ylabel = 'Frequency')
+            x_labels = cat_df['Category']
+            title = 'Frequency Distribution of '+var_name
+            ax.set_xticklabels(x_labels)
+            ax.set_title(title, y=1.03, fontsize=18)
+            #ax.bar_label(ax.containers[-1],autopct_format(cat_df['Frequency']), label_type='center')
+            for p in ax.patches:
+                ax.annotate('{}\n({:.1f}%)'.format(p.get_height().astype(int),p.get_height()/tot_count*100), (p.get_x(), p.get_height()+1))
+        elif viz == 'Pie':
+            plt.figure(figsize=(10,8))
+            colors = sns.color_palette('pastel')
+            plt.pie(cat_df['Frequency'], labels = cat_df['Category'], colors = colors, autopct=autopct_format(cat_df['Frequency']))
+            title = 'Distribution of '+var_name
+    return cat_df
