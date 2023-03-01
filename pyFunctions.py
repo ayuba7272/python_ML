@@ -69,7 +69,7 @@ def regression_eval(y_true,y_pred,thrs=0,predictors=0):
 		10.Percentage of Under-prediction : %age Records where model under-predicts above a specified threshold compared to y_true
     
     '''
-    if len(y_true) != len(y_true):
+    if len(y_true) != len(y_pred):
         print('Length of Actual and Predicted lists is unequal. Please check and correct the same!')
         return
     
