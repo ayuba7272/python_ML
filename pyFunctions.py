@@ -44,6 +44,7 @@ def dataframe_null_report(df=None,null_pct_threshold=0):
 
 ############################################################################################################################
 
+#Function to evaluate the regression model
 from sklearn.metrics import mean_squared_error,mean_squared_log_error, mean_absolute_percentage_error, r2_score
 def regression_eval(y_true,y_pred,thrs=0,predictors=0):
     '''
@@ -135,10 +136,19 @@ def regression_eval(y_true,y_pred,thrs=0,predictors=0):
     eval_metrics.index.set_names('Evaluation Metric',inplace=True)
     eval_metrics['Value'] = eval_metrics['Value'].apply(lambda x: '%.2f' % x)
     
+    #plotting the kde for actual and predicted values
+    sns.kdeplot(y_true, label='Actual',  alpha=.75, fill = True)
+    sns.kdeplot(y_pred, label='Predicted', alpha=.5, fill = True)
+    # Plot formatting
+    plt.legend(prop={'size': 10})
+    plt.title('Regression Model Performance')
+    plt.xlabel('Target Variable')
+    plt.ylabel('Density')
+    plt.figure(figsize = (20,8))
+    
     return eval_metrics
 
 #regression_eval(y_true,y_pred,thrs = 1, predictors=X.shape[1])
-
 
 ############################################################################################################################
 
